@@ -1,4 +1,6 @@
+import { disableDebugTools } from '@angular/platform-browser'
 import {test} from '@playwright/test'
+import { sortByDomain } from '@swimlane/ngx-charts'
 
 test.beforeEach(async({page}) => { 
   await page.goto('http://localhost:4200/') 
@@ -33,4 +35,14 @@ page.locator(':text("Using")')
 
 //by exact text match
 page.locator(':text-is("Using the Grid")')
+})
+
+test.only('test visible locators', async({page}) => {
+  await page.getByRole('textbox',{name: "Email"}).first().click()
+  await page.getByRole('button', {name: "Sign In"}).first().click()
+  await page.getByLabel('Email').first().click()
+  await page.getByPlaceholder('Jane Doe').click()
+  await page.getByText('Using the Grid').click()
+ // await page.getByTitle('IoT Dashboard').click()
+  await page.getByTestId('SignInHamza').click()
 })
