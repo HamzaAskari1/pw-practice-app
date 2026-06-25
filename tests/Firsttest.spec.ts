@@ -11,7 +11,7 @@ test.beforeEach(async({page}) => {
 })
 
 
-test('test syntax rules 1', async({page}) => {
+test(' locators test syntax rules 1', async({page}) => {
 //by tag name
 await page.locator('input').first().click()
 
@@ -37,7 +37,7 @@ page.locator(':text("Using")')
 page.locator(':text-is("Using the Grid")')
 })
 
-test.only('test visible locators', async({page}) => {
+test('test visible locators', async({page}) => {
   await page.getByRole('textbox',{name: "Email"}).first().click()
   await page.getByRole('button', {name: "Sign In"}).first().click()
   await page.getByLabel('Email').first().click()
@@ -45,4 +45,12 @@ test.only('test visible locators', async({page}) => {
   await page.getByText('Using the Grid').click()
  // await page.getByTitle('IoT Dashboard').click()
   await page.getByTestId('SignInHamza').click()
+})
+
+test.only('locating child elements', async({page}) => {
+
+await page.locator('nb-card nb-radio :text-is("Option 1")').click()
+await page.locator('nb-card').locator('nb-radio').locator(':text-is("Option 2")').click()
+await page.locator('nb-card').getByRole('button', {name: "Sign In"}).first().click()
+await page.locator('nb-card').nth(2).getByRole('button').click()
 })
