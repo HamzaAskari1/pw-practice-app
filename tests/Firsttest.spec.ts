@@ -1,5 +1,5 @@
 import { disableDebugTools } from '@angular/platform-browser'
-import {test} from '@playwright/test'
+import {test, expect} from '@playwright/test'
 import { sortByDomain } from '@swimlane/ngx-charts'
 
 test.beforeEach(async({page}) => { 
@@ -47,10 +47,36 @@ test('test visible locators', async({page}) => {
   await page.getByTestId('SignInHamza').click()
 })
 
-test.only('locating child elements', async({page}) => {
+test('locating child elements', async({page}) => {
 
 await page.locator('nb-card nb-radio :text-is("Option 1")').click()
 await page.locator('nb-card').locator('nb-radio').locator(':text-is("Option 2")').click()
 await page.locator('nb-card').getByRole('button', {name: "Sign In"}).first().click()
 await page.locator('nb-card').nth(2).getByRole('button').click()
+})
+
+test('locating parent element', async({page})=>{
+
+await page.locator('nb-card', {hasText: "Using the Grid"}).getByRole('textbox',{name: "Email"}).click()
+await page.locator('nb-card', {has: page.locator('#inputPassword2')}).getByRole('textbox',{name: "Password"}).click()
+
+await page.locator ('nb-card').filter({hasText: "Basic Form"}).getByRole('textbox',{name: "Email"}).click()
+await page.locator('nb-card').filter({has: page.locator('.status-danger')}).getByRole('textbox',{name: "Password"}).click()
+await page.locator('nb-card').filter({has: page.locator('nb-checkbox')}).filter({hasText: "Sign In"}).getByRole('textbox',{name: "Email"}).click()
+
+await page.locator(':text-is("Using the Grid")').locator('..').getByRole('textbox',{name: "Email"}).click()
+})
+
+test.only('Reusing Locators', async({page})=>{
+ const Basicform = page.locator ('nb-card').filter({hasText: "Basic Form"})
+ const emailField = Basicform.getByRole('textbox',{name: "Email"})
+ const passwordField = Basicform.getByRole('textbox',{name: "Password"})
+
+await emailField.fill('hamza1askari@gmail.com')
+await passwordField.fill('Test123')
+await Basicform.locator('nb-checkbox').click()
+await Basicform.getByRole('button').click()
+
+await expect(emailField).toHaveValue('hamza1askari@gmail.com')
+
 })
