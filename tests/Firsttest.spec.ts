@@ -10,7 +10,7 @@ test.beforeEach(async({page}) => {
 
 })
 
-
+/////////////////////////////////////////////////////////////////////////////////////////
 test(' locators test syntax rules 1', async({page}) => {
 //by tag name
 await page.locator('input').first().click()
@@ -36,6 +36,7 @@ page.locator(':text("Using")')
 //by exact text match
 page.locator(':text-is("Using the Grid")')
 })
+/////////////////////////////////////////////////////////////////////////////////////////
 
 test('test visible locators', async({page}) => {
   await page.getByRole('textbox',{name: "Email"}).first().click()
@@ -47,6 +48,8 @@ test('test visible locators', async({page}) => {
   await page.getByTestId('SignInHamza').click()
 })
 
+/////////////////////////////////////////////////////////////////////////////////////////
+
 test('locating child elements', async({page}) => {
 
 await page.locator('nb-card nb-radio :text-is("Option 1")').click()
@@ -54,6 +57,8 @@ await page.locator('nb-card').locator('nb-radio').locator(':text-is("Option 2")'
 await page.locator('nb-card').getByRole('button', {name: "Sign In"}).first().click()
 await page.locator('nb-card').nth(2).getByRole('button').click()
 })
+
+/////////////////////////////////////////////////////////////////////////////////////////
 
 test('locating parent element', async({page})=>{
 
@@ -66,6 +71,8 @@ await page.locator('nb-card').filter({has: page.locator('nb-checkbox')}).filter(
 
 await page.locator(':text-is("Using the Grid")').locator('..').getByRole('textbox',{name: "Email"}).click()
 })
+
+/////////////////////////////////////////////////////////////////////////////////////////
 
 test('Reusing Locators', async({page})=>{
  const Basicform = page.locator ('nb-card').filter({hasText: "Basic Form"})
@@ -81,7 +88,9 @@ await expect(emailField).toHaveValue('hamza1askari@gmail.com')
 
 })
 
-test.only('getting text from web element', async({page})=>{
+/////////////////////////////////////////////////////////////////////////////////////////
+
+test('getting text from web element', async({page})=>{
 
 //single text value
 const Basicform = page.locator ('nb-card').filter({hasText: "Basic Form"})
@@ -103,11 +112,29 @@ expect(emailvalue).toEqual('test@test.com')
 const placeholdervalue = await emailfield.getAttribute('placeholder')
 expect(placeholdervalue).toEqual('Email')
 
+})
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+test.only('assertions', async({page})=> {
+
+   const Basicformbutton = page.locator ('nb-card').filter({hasText: "Basic Form"}).locator('button')
+//general assertions
+
+const value = 5
+expect(value).toEqual(5)
 
 
+const Basicformbutton2 = await Basicformbutton.textContent()
+expect(Basicformbutton2).toEqual('Submit')
 
+//locator assertion
 
+//it should locate this Basicformbutton = page.locator ('nb-card').filter({hasText: "Basic Form"}).locator('button')
+await expect(Basicformbutton).toHaveText('Submit')
 
-
+//soft assertion 
+await expect.soft(Basicformbutton).toHaveText('submit5')
+await Basicformbutton.click()
 
 })
