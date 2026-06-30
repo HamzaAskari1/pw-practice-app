@@ -67,7 +67,7 @@ await page.locator('nb-card').filter({has: page.locator('nb-checkbox')}).filter(
 await page.locator(':text-is("Using the Grid")').locator('..').getByRole('textbox',{name: "Email"}).click()
 })
 
-test.only('Reusing Locators', async({page})=>{
+test('Reusing Locators', async({page})=>{
  const Basicform = page.locator ('nb-card').filter({hasText: "Basic Form"})
  const emailField = Basicform.getByRole('textbox',{name: "Email"})
  const passwordField = Basicform.getByRole('textbox',{name: "Password"})
@@ -78,5 +78,36 @@ await Basicform.locator('nb-checkbox').click()
 await Basicform.getByRole('button').click()
 
 await expect(emailField).toHaveValue('hamza1askari@gmail.com')
+
+})
+
+test.only('getting text from web element', async({page})=>{
+
+//single text value
+const Basicform = page.locator ('nb-card').filter({hasText: "Basic Form"})
+const buttontext = await Basicform.locator('button').textContent()
+expect(buttontext).toEqual('Submit')
+
+//all text values
+const allradiobuttonlabels = await page.locator('nb-radio').allTextContents()
+expect(allradiobuttonlabels).toContain("Option 1")
+
+//input field vale
+
+const emailfield = Basicform.getByRole('textbox', {name: "Email"})
+await emailfield.fill('test@test.com')
+
+const emailvalue = await emailfield.inputValue()
+expect(emailvalue).toEqual('test@test.com')
+
+const placeholdervalue = await emailfield.getAttribute('placeholder')
+expect(placeholdervalue).toEqual('Email')
+
+
+
+
+
+
+
 
 })
