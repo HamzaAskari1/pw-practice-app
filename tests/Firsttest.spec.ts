@@ -38,7 +38,7 @@ page.locator(':text-is("Using the Grid")')
 })
 /////////////////////////////////////////////////////////////////////////////////////////
 
-test('test visible locators', async({page}) => {
+test.only('test visible locators', async({page}) => {
   await page.getByRole('textbox',{name: "Email"}).first().click()
   await page.getByRole('button', {name: "Sign In"}).first().click()
   await page.getByLabel('Email').first().click()
@@ -116,7 +116,7 @@ expect(placeholdervalue).toEqual('Email')
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-test.only('assertions', async({page})=> {
+test('assertions', async({page})=> {
 
    const Basicformbutton = page.locator ('nb-card').filter({hasText: "Basic Form"}).locator('button')
 //general assertions
