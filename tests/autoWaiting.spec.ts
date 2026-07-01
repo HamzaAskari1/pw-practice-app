@@ -1,9 +1,9 @@
 import {test, expect} from '@playwright/test'
 
-test.beforeEach(async({page}) => { 
+test.beforeEach(async({page}, testInfo) => { 
   await page.goto('http://uitestingplayground.com/ajax') 
   await page.getByText('Button Triggering AJAX Request').click()
- 
+ testInfo.setTimeout(testInfo.timeout+8000) //increase default timeout for this test file by 4 seconds
 })
 
 // test('auto waiting', async({page}) =>{
@@ -36,5 +36,18 @@ await page.waitForLoadState('networkidle')
 
 const text = await successButton.allTextContents()
 expect(text).toContain('Data loaded with AJAX get request.')
+
+})
+
+
+test.only('timeout testing', async({page}) => {
+
+//test.setTimeout(10000) //set timeout for this test only
+
+//test.slow()  //increase the default timout to 3X the amount (10 seconds X 3 = 30 seconds)
+const successButton = page.locator('.bg-success')
+await successButton.click()
+
+
 
 })
