@@ -49,7 +49,6 @@ expect(radiostatus).toBeTruthy()
 expect(usingthegridform.getByRole('radio', {name: "Option 1"})).toBeChecked()
 
 // select option 2
-
 await usingthegridform.getByRole('radio', {name: "Option 2"}).check({force: true})
 
 //expect (bolean value of is checked function). to be false(unchecked)
@@ -59,6 +58,67 @@ expect(await usingthegridform.getByRole('radio', {name: "Option 1"}).isChecked()
 expect(await usingthegridform.getByRole('radio', {name: "Option 2"}).isChecked()).toBeTruthy()
 
 })
+})
 
+test('Checkboxes', async({page}) => {
+  await page.getByText('Modal & Overlays').click()
+  await page.getByText('Toastr').click()
+
+  // check() will check the checkbox if it is checked then it will keep it checked, if it is unchecked it will check it
+
+  // uncheck() will check if the checkbox is unchecked. If unchecked it will keep it unchecked. 
+  //isChecked(), will return boolean of checkbox checked/unchecked
+
+
+  await page.getByRole('checkbox', {name: "Hide on click"}).uncheck({force: true})
+  await page.getByRole('checkbox', {name: "Prevent arising of duplicate toast"}).uncheck({force: true})
+
+  const allboxes = page.getByRole('checkbox')
+
+  for (const box of await allboxes.all())
+  {
+    await box.uncheck({force: true})
+    expect(await box.isChecked()).toBeFalsy()
+  }
+
+})
+
+test('dropdown list', async({page}) => {
+
+const dropdownmenu = page.locator('ngx-header nb-select')
+await dropdownmenu.click()
+
+page.getByRole('list') //when the list has a UL tag
+page.getByRole('listitem') //when the list has LI tag
+
+//const optionlistitem = page.getByRole('list').locator('nb-option')
+const optionlistitem = page.locator('nb-option-list nb-option')
+
+//how to assert list of dropdown list items
+await expect(optionlistitem).toHaveText(["Light", "Dark", "Cosmic", "Corporate"])
+
+//selection of a dropdown menu item
+await optionlistitem.filter({hasText: "Cosmic"}).click()
+
+
+const headerlocator = page.locator('nb-layout-header')
+expect(headerlocator).toHaveCSS('background-color', 'rgb(50, 50, 89)') 
+
+//create an object for colours
+const colours = {
+
+"Light": "rgb(255, 255, 255)",
+"Dark": "rgb(34, 43, 69)",
+"Cosmic": "rgb(50, 50, 89)",
+"Corporate": "rgb(255, 255, 255)"
+}
+
+await dropdownmenu.click()
+for (const color in colours){
+await optionlistitem.filter({hasText: color}).click()
+await expect(headerlocator).toHaveCSS('background-color', colours[color])
+await dropdownmenu.click()
+
+}
 
 })
