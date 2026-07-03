@@ -1,6 +1,6 @@
-import { disableDebugTools } from '@angular/platform-browser'
+
 import {test, expect} from '@playwright/test'
-import { sortByDomain } from '@swimlane/ngx-charts'
+
 
 test.beforeEach(async({page}) => { 
   await page.goto('http://localhost:4200/') 

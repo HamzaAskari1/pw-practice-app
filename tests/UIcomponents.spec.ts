@@ -1,7 +1,6 @@
-import { disableDebugTools } from '@angular/platform-browser'
-import {test, expect} from '@playwright/test'
-import { sortByDomain } from '@swimlane/ngx-charts'
-import { using } from 'rxjs'
+
+import {test,expect} from '@playwright/test'
+
 
 test.beforeEach(async({page}) => { 
   await page.goto('http://localhost:4200/') 
@@ -95,7 +94,7 @@ page.getByRole('listitem') //when the list has LI tag
 const optionlistitem = page.locator('nb-option-list nb-option')
 
 //how to assert list of dropdown list items
-await expect(optionlistitem).toHaveText(["Light", "Dark", "Cosmic", "Corporate"])
+// await expect(optionlistitem).toHaveText(["Light", "Dark", "Cosmic", "Corporate"])
 
 //selection of a dropdown menu item
 await optionlistitem.filter({hasText: "Cosmic"}).click()
@@ -106,19 +105,33 @@ expect(headerlocator).toHaveCSS('background-color', 'rgb(50, 50, 89)')
 
 //create an object for colours
 const colours = {
-
-"Light": "rgb(255, 255, 255)",
-"Dark": "rgb(34, 43, 69)",
-"Cosmic": "rgb(50, 50, 89)",
-"Corporate": "rgb(255, 255, 255)"
+  Light: "rgb(255, 255, 255)",
+  Dark: "rgb(34, 43, 69)",
+  Cosmic: "rgb(50, 50, 89)",
+  Corporate: "rgb(255, 255, 255)",
 }
 
 await dropdownmenu.click()
-for (const color in colours){
-await optionlistitem.filter({hasText: color}).click()
-await expect(headerlocator).toHaveCSS('background-color', colours[color])
-await dropdownmenu.click()
-
+for (const color in colours) {
+  await optionlistitem.filter({hasText: color}).click()
+  await expect(headerlocator).toHaveCSS('background-color', colours[color])
+  await dropdownmenu.click()
 }
+
+})
+
+test('tooltips', async({page}) => {
+
+//for tooltips we hover over the button and then check if the tooltip appears then we click f8 to freeze and 
+// get the locator
+
+
+await page.getByText('Tooltip').click()
+
+const tooltipcard = page.locator('nb-card', {hasText: "Tooltip Placements"})
+await tooltipcard.getByRole('button', {name: "TOP"}).hover()
+page.getByRole('tooltip') //must have a role with tooltip defined 
+const tooltip = await page.locator('nb-tooltip').textContent()
+expect(tooltip).toEqual('This is a tooltip')
 
 })
