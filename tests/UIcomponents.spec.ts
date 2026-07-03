@@ -122,3 +122,12 @@ await dropdownmenu.click()
 }
 
 })
+
+test('tooltips', async({page}) => {
+await page.getByText('Modal & Overlays').click()
+await page.getByText('Tooltip').click()
+
+const tooltipcard = page.locator('nb-card', {hasText: "Tooltip Placements"})
+await tooltipcard.getByRole('button', {name: "TOP"}).hover()
+
+})
