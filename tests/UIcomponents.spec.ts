@@ -125,7 +125,7 @@ test('tooltips', async({page}) => {
 //for tooltips we hover over the button and then check if the tooltip appears then we click f8 to freeze and 
 // get the locator
 
-
+await page.getByText('Modal & Overlays').click()
 await page.getByText('Tooltip').click()
 
 const tooltipcard = page.locator('nb-card', {hasText: "Tooltip Placements"})
@@ -133,5 +133,26 @@ await tooltipcard.getByRole('button', {name: "TOP"}).hover()
 page.getByRole('tooltip') //must have a role with tooltip defined 
 const tooltip = await page.locator('nb-tooltip').textContent()
 expect(tooltip).toEqual('This is a tooltip')
+
+})
+
+test('dialog box', async({page}) => {
+
+await page.getByText('Tables & Data').click()
+await page.getByText('Smart Table').click()
+
+//We need to create a listener for browser window that should accept it
+
+page.on('dialog', dialog => {
+
+expect(dialog.message()).toEqual('Are you sure you want to delete?')
+dialog.accept() //accepts the dialog box
+})
+
+await page.getByRole('table').locator('tr').filter({hasText: "mdo@gmail.com"}).locator('.nb-trash').click() //clicks the trash icon for the row with the email
+await expect(page.getByRole('table').locator('tr').filter({hasText: "mdo@gmail.com"})).not.toBeVisible()
+await expect(page.locator('table tr').first()).not.toHaveText("mdo@gmail.com")
+
+
 
 })
