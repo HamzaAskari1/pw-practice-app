@@ -153,6 +153,35 @@ await page.getByRole('table').locator('tr').filter({hasText: "mdo@gmail.com"}).l
 await expect(page.getByRole('table').locator('tr').filter({hasText: "mdo@gmail.com"})).not.toBeVisible()
 await expect(page.locator('table tr').first()).not.toHaveText("mdo@gmail.com")
 
+})
+test('web tables', async({page}) => {
+
+await page.getByText('Tables & Data').click()
+await page.getByText('Smart Table').click()
+
+// get the row by any test in the row and then get the edit icon and click it
+const targetrow = page.getByRole('row', {name: "twitter@outlook.com"})
+await targetrow.locator('.nb-edit').click() 
+await page.locator('input-editor').getByRole('textbox', {name: "Age"}).clear()
+await page.locator('input-editor').getByRole('textbox', {name: "Age"}).fill("43")
+await page.locator('.nb-checkmark').click()
+
+// get the row by specific value in the column
+// td refers to columns
+//tr refers to rows 
+
+
+await page.locator('.ng2-smart-pagination-nav').getByText('2').click() //clicks the page 2 button
+const targetrowbyid = page.getByRole('row', {name: "11"}).filter({has: page.locator('td').nth(1).filter({hasText: "11"})})
+await targetrowbyid.locator('.nb-edit').click()
+
+// either use following:
+await page.locator('input-editor').getByRole('textbox', {name: "E-mail"}).clear()
+await page.locator('input-editor').getByRole('textbox', {name: "E-mail"}).fill("hamza1askari@gmail.com")
+// or you can use below
+await page.locator('input-editor').getByPlaceholder('Last Name').clear()
+await page.locator('input-editor').getByPlaceholder('Last Name').fill("Askari")
+await page.locator('.nb-checkmark').click()
 
 
 })
