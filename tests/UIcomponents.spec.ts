@@ -184,4 +184,34 @@ await page.locator('input-editor').getByPlaceholder('Last Name').fill("Askari")
 await page.locator('.nb-checkmark').click()
 
 
+
+})
+
+test('web tables loop', async({page}) => 
+{
+  await page.getByText('Tables & Data').click()
+  await page.getByText('Smart Table').click()
+
+  
+  const ages = ['20', '30', '40', '200']
+
+for (let age of ages) 
+{
+  await page.locator('input-filter').getByRole('textbox', {name: "Age"}).clear()
+  await page.locator('input-filter').getByRole('textbox', {name: "Age"}).fill(age)
+  await page.waitForTimeout(500)
+  const agerows = page.locator('tbody tr')
+  for (let row of await agerows.all()) 
+  {
+    const CellValue = await row.locator('td').last().textContent()
+    if (age === '200') 
+    {
+      expect(await page.getByRole('table').textContent()).toContain('No data found')
+    } else 
+    
+    {
+      expect(CellValue).toEqual(age)
+    }
+  }
+ }
 })
