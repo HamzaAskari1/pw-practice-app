@@ -215,3 +215,18 @@ for (let age of ages)
   }
  }
 })
+test('Date Picker', async({page}) => 
+  {
+    await page.getByText('Forms').click()
+    await page.getByText('Datepicker').click()
+
+    const calendarinputfield = page.getByPlaceholder('Form Picker')
+    
+    await calendarinputfield.click()
+    
+    // we need to put exact true to restrict result to July 1st only. Otherwise it will see a lot of 1s (11, 12, 13..etc). 
+    await page.locator('[class="day-cell ng-star-inserted"]').getByText('1', {exact: true} ).click()
+    await expect(calendarinputfield).toHaveValue('Jul 1, 2026')
+
+
+  })
