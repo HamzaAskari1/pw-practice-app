@@ -3,7 +3,7 @@ import {test,expect} from '@playwright/test'
 
 
 test.beforeEach(async({page}) => { 
-  await page.goto('http://localhost:4200/') 
+  await page.goto('https://playground.bondaracademy.com/') 
 
   })
 
@@ -31,6 +31,11 @@ test.describe('Form Layout page', () => {
     //locator assertion
     await expect(UsingTheGridEmailField).toHaveValue("test@test.com")
  })
+test ('generate text', async({page}) => {
+
+  await page.locator('#inputEmail1').fill('hamza@yahoo.com')
+})
+
 
 test('radio buttons', async({page}) =>{
 const usingthegridform = await page.locator('nb-card', {hasText: "Using the Grid"})
@@ -226,9 +231,12 @@ test('Date Picker', async({page}) =>
     
     // we need to put exact true to restrict result to July 1st only. Otherwise it will see a lot of 1s (11, 12, 13..etc). 
     await page.locator('[class="day-cell ng-star-inserted"]').getByText('1', {exact: true} ).click()
-    await expect(calendarinputfield).toHaveValue('Jul 1, 2026')
+    await expect(calendarinputfield).toHaveValue('Oct 1, 2026')
 
     //10 Aug
 
 
   })
+
+
+
